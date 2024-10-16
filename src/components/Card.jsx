@@ -1,5 +1,4 @@
 import Image from "next/image";
-import image from "@/public/images/h1.png";
 import Lokation from "@/public/svg/Lokation";
 import Bed from "@/public/svg/Bed";
 import Vector from "@/public/svg/Vector";
@@ -15,16 +14,16 @@ export default function Card({
   forRent,
 }) {
   return (
-    <div className="w-96 h- h-[455px] flex-col justify-start items-start inline-flex ">
+    <div className="  flex-col justify-start items-start inline-flex cursor-pointer ">
       <div className="absolute mt-5 ml-5 w-[90px] h-[26px] p-1.5 bg-[#021526]/50 rounded-[15px] justify-center items-center gap-2.5 inline-flex">
         <div className="text-center text-white text-xs font-medium font-['FiraGO'] tracking-wide">
-          {forRent ? "ქირავდება" : "iyideba"}
+          {forRent ? "ქირავდება" : "იყიდება"}
         </div>
       </div>
       <Image
         alt="home-image"
-        width={1000}
-        height={1000}
+        width={400}
+        height={400}
         className=" self-stretch h-[307px] rounded-tl-[14px] rounded-tr-[14px]"
         src={imgSrc}
       />
