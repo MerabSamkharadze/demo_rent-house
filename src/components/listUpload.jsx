@@ -5,18 +5,32 @@ import { useState } from "react";
 export default function ListUpload() {
   const [formData, setFormData] = useState({
     propertyType: "",
-    lastName: "",
-    email: "",
-    phone: "",
+    location: "",
+    postalCode: "",
+    region: "",
     address: "",
     city: "",
-    zip: "",
-    comments: "",
+    width: "",
+    amount: "",
+    description: "",
+    image: null,
   });
+
+  const [preview, setPreview] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "image") {
+      const file = e.target.files[0];
+      setFormData({ ...formData, [name]: file });
+
+      const imagePreviewUrl = URL.createObjectURL(file);
+      setPreview(imagePreviewUrl);
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
 
     if (name === "propertyType") {
       console.log(value === "buy" ? "იყიდება" : "ქირავდება");
@@ -34,8 +48,8 @@ export default function ListUpload() {
         ლისტინგის დამატება
       </h1>
       <form onSubmit={handleSubmit}>
-        <h3>გარიგების ტიპი</h3>
-        <div className="grid grid-cols-2">
+        <h3 className="my-4 text-xl">გარიგების ტიპი</h3>
+        <div className="flex items-center space-x-8">
           <div className="flex items-center">
             <input
               type="radio"
@@ -70,53 +84,49 @@ export default function ListUpload() {
             </label>
           </div>
         </div>
-        <h1 className="mt-3">მდებარეობა</h1>
-        <div className="grid grid-cols-2 gap-6 mt-6">
-          <div className="col-span-2">
+
+        <h1 className="mt-10 text-xl">მდებარეობა</h1>
+
+        <div className="grid grid-cols-2 gap-6 mt-2">
+          <div>
             <label className="block text-sm font-medium text-gray-700">
-              Last Name
+              მისამართი
             </label>
             <input
               type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
+              name="location"
+              value={formData.location}
               onChange={handleInputChange}
               className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Phone
+              საფოსტო ინდექსი
             </label>
             <input
               type="text"
-              name="phone"
-              value={formData.phone}
+              name="postalCode"
+              value={formData.postalCode}
               onChange={handleInputChange}
               className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
             />
           </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              City
+              რეგიონი
+            </label>
+            <input
+              type="text"
+              name="region"
+              value={formData.region}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              ქალაქი
             </label>
             <input
               type="text"
@@ -126,31 +136,119 @@ export default function ListUpload() {
               className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
             />
           </div>
+        </div>
+
+        <h1 className="mt-10 text-xl">ბინის დეტალები</h1>
+
+        <div className="mt-6 grid grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              ZIP
+              ფასი
             </label>
             <input
-              type="text"
-              name="zip"
-              value={formData.zip}
+              type="number"
+              name="price"
+              value={formData.price}
               onChange={handleInputChange}
               className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
+              min="0"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              ფართობი
+            </label>
+            <input
+              type="number"
+              name="width"
+              value={formData.width}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 grid grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              საძინებელი რაოდენობა
+            </label>
+            <input
+              type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
+              step="1"
+              min="0"
             />
           </div>
         </div>
 
         <div className="mt-6">
           <label className="block text-sm font-medium text-gray-700">
-            Comments
+            აღწერა
           </label>
           <textarea
-            name="comments"
-            value={formData.comments}
+            name="description"
+            value={formData.description}
             onChange={handleInputChange}
             rows="4"
             className="mt-1 block w-full border-2 border-black rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm"
           />
+        </div>
+
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700">
+            ატვირთეთ სურათი *
+          </label>
+          <div className="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-md">
+            {preview ? (
+              <img
+                src={preview}
+                alt="Selected"
+                className="object-cover w-full h-full rounded-md"
+              />
+            ) : (
+              <div className="space-y-1 text-center">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M28 8h14a2 2 0 012 2v28a2 2 0 01-2 2H6a2 2 0 01-2-2V10a2 2 0 012-2h14M16 20l4 4m0 0l4-4m-4 4V4"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <div className="flex text-sm text-gray-600">
+                  <label
+                    htmlFor="file-upload"
+                    className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  >
+                    <span>Choose a file</span>
+                    <input
+                      id="file-upload"
+                      name="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleInputChange}
+                      className="sr-only"
+                    />
+                  </label>
+                  <p className="pl-1">or drag and drop</p>
+                </div>
+                <p className="text-xs text-gray-500">
+                  PNG, JPG, GIF up to 10MB
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="mt-6 flex justify-end">
