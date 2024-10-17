@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ListUpload() {
   const [formData, setFormData] = useState({
     propertyType: "",
     location: "",
+    price: "",
     postalCode: "",
     region: "",
-    address: "",
     city: "",
     width: "",
     amount: "",
@@ -16,30 +17,61 @@ export default function ListUpload() {
     image: null,
   });
 
+  const router = useRouter();
+
   const [preview, setPreview] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
 
-    if (name === "image") {
+    const integerFields = ["postalCode", "width", "amount", "price"];
+
+    if (integerFields.includes(name)) {
+      setFormData({
+        ...formData,
+        [name]: parseInt(value, 10) || "",
+      });
+    } else if (name === "image") {
       const file = e.target.files[0];
-      setFormData({ ...formData, [name]: file });
+      setFormData({
+        ...formData,
+        [name]: file,
+      });
 
       const imagePreviewUrl = URL.createObjectURL(file);
       setPreview(imagePreviewUrl);
     } else {
-      setFormData({ ...formData, [name]: value });
-    }
-
-    if (name === "propertyType") {
-      console.log(value === "buy" ? "იყიდება" : "ქირავდება");
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const formDataToSend = new FormData();
+
+    Object.keys(formData).forEach((key) => {
+      formDataToSend.append(key, formData[key]);
+    });
+
+    try {
+      const response = await fetch("/api/createList", {
+        method: "POST",
+        body: formDataToSend,
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Form submitted successfully:", result);
+      } else {
+        console.error("Form submission failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during form submission:", error);
+    }
+
+    router.push("/");
   };
 
   return (
@@ -159,7 +191,7 @@ export default function ListUpload() {
               ფართობი
             </label>
             <input
-              type="number"
+              type="decimal"
               name="width"
               value={formData.width}
               onChange={handleInputChange}
