@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      maxHeight: {
+        455: "455px",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
