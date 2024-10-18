@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import pool from "@/libs/connection";
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url); 
+  const id = searchParams.get("id"); 
   try {
-    let sql = `SELECT * FROM rooms`;
+    const values = [];
+    let sql = `SELECT * FROM rooms `; 
+    if (id) {
+      sql += ` WHERE id = ?`; 
+      values.push(id);
+    }
 
-    const [results] = await pool.query(sql);
+    const [results] = await pool.query(sql, values);
 
     const products = results.map((result) => ({
       ...result,
