@@ -52,7 +52,6 @@ export default function ListUpload() {
     setIsLoading(true);
 
     try {
-      // Step 1: Upload the image to S3
       let imageUrl = null;
       if (formData.image) {
         const imageData = new FormData();
@@ -65,7 +64,7 @@ export default function ListUpload() {
 
         const imageUploadResult = await imageUploadResponse.json();
         if (imageUploadResponse.ok) {
-          imageUrl = imageUploadResult.imageUrl; // S3 image URL
+          imageUrl = imageUploadResult.imageUrl;
         } else {
           console.error("Image upload failed:", imageUploadResult.message);
           setIsLoading(false);
@@ -73,7 +72,6 @@ export default function ListUpload() {
         }
       }
 
-      // Step 2: Send the rest of the data (with image URL) to the database API
       const otherData = {
         propertyType: formData.propertyType,
         location: formData.location,
@@ -84,7 +82,7 @@ export default function ListUpload() {
         width: formData.width,
         amount: formData.amount,
         description: formData.description,
-        imageUrl, // This is the S3 image URL
+        imageUrl,
       };
 
       const response = await fetch("/api/createList", {

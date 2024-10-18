@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import AWS from "aws-sdk";
 import pool from "@/libs/connection";
 
-// Configure AWS SDK for S3
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -11,7 +10,7 @@ const s3 = new AWS.S3({
 
 export async function POST(req) {
   try {
-    const data = await req.json(); // Assuming you're sending JSON data
+    const data = await req.json();
     const {
       propertyType,
       location,
@@ -22,7 +21,7 @@ export async function POST(req) {
       width,
       amount,
       description,
-      imageUrl, // This will be the S3 URL
+      imageUrl,
     } = data;
 
     if (
@@ -43,7 +42,6 @@ export async function POST(req) {
       );
     }
 
-    // Insert form data into MySQL
     const query = `
         INSERT INTO rooms (propertyType, lcoation, price, postalCode, region, city, width, amount, description, imageUrl)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -58,7 +56,7 @@ export async function POST(req) {
       width,
       amount,
       description,
-      imageUrl, // Store the image URL from S3 in the database
+      imageUrl,
     ];
 
     const [result] = await pool.query(query, values);
