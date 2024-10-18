@@ -120,7 +120,7 @@ export default function ListUpload() {
               type="radio"
               id="buy"
               name="propertyType"
-              value="buy"
+              value="იყიდება"
               onChange={handleInputChange}
               className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
             />
@@ -137,7 +137,7 @@ export default function ListUpload() {
               type="radio"
               id="rent"
               name="propertyType"
-              value="rent"
+              value="ქირავდება"
               onChange={handleInputChange}
               className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
             />
