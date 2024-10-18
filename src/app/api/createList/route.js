@@ -1,22 +1,31 @@
 import { NextResponse } from "next/server";
+import AWS from "aws-sdk";
 import pool from "@/libs/connection";
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
 
 export async function POST(req) {
   try {
-    const data = await req.formData();
-    const propertyType = data.get("propertyType");
-    const location = data.get("location");
-    const price = data.get("price");
-    const postalCode = data.get("postalCode");
-    const region = data.get("region");
-    const city = data.get("city");
-    const width = data.get("width");
-    const amount = data.get("amount");
-    const description = data.get("description");
-    const file = data.get("image");
+    const data = await req.json();
+    const {
+      propertyType,
+      location,
+      price,
+      postalCode,
+      region,
+      city,
+      width,
+      amount,
+      description,
+      imageUrl,
+    } = data;
 
     if (
-      !file ||
+      !imageUrl ||
       !propertyType ||
       !description ||
       !location ||
@@ -33,13 +42,10 @@ export async function POST(req) {
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
     const query = `
-      INSERT INTO rooms (propertyType, lcoation, price, postalCode, region, city, width, amount, description, image)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+        INSERT INTO rooms (propertyType, lcoation, price, postalCode, region, city, width, amount, description, imageUrl)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
     const values = [
       propertyType,
       location,
@@ -50,7 +56,7 @@ export async function POST(req) {
       width,
       amount,
       description,
-      buffer,
+      imageUrl,
     ];
 
     const [result] = await pool.query(query, values);

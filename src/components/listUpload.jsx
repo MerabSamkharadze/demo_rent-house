@@ -18,12 +18,11 @@ export default function ListUpload() {
   });
 
   const router = useRouter();
-
   const [preview, setPreview] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     const integerFields = ["postalCode", "width", "amount", "price"];
 
     if (integerFields.includes(name)) {
@@ -50,28 +49,62 @@ export default function ListUpload() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
-
-    Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
-    });
+    setIsLoading(true);
 
     try {
+      let imageUrl = null;
+      if (formData.image) {
+        const imageData = new FormData();
+        imageData.append("image", formData.image);
+
+        const imageUploadResponse = await fetch("/api/uploadImage", {
+          method: "POST",
+          body: imageData,
+        });
+
+        const imageUploadResult = await imageUploadResponse.json();
+        if (imageUploadResponse.ok) {
+          imageUrl = imageUploadResult.imageUrl;
+        } else {
+          console.error("Image upload failed:", imageUploadResult.message);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      const otherData = {
+        propertyType: formData.propertyType,
+        location: formData.location,
+        price: formData.price,
+        postalCode: formData.postalCode,
+        region: formData.region,
+        city: formData.city,
+        width: formData.width,
+        amount: formData.amount,
+        description: formData.description,
+        imageUrl,
+      };
+
       const response = await fetch("/api/createList", {
         method: "POST",
-        body: formDataToSend,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(otherData),
       });
+
       if (response.ok) {
         const result = await response.json();
         console.log("Form submitted successfully:", result);
+        router.push("/");
       } else {
         console.error("Form submission failed:", response.statusText);
       }
     } catch (error) {
       console.error("Error during form submission:", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    router.push("/");
   };
 
   return (
@@ -118,7 +151,6 @@ export default function ListUpload() {
         </div>
 
         <h1 className="mt-10 text-xl">მდებარეობა</h1>
-
         <div className="grid grid-cols-2 gap-6 mt-2">
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -171,7 +203,6 @@ export default function ListUpload() {
         </div>
 
         <h1 className="mt-10 text-xl">ბინის დეტალები</h1>
-
         <div className="mt-6 grid grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -287,8 +318,9 @@ export default function ListUpload() {
           <button
             type="submit"
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            disabled={isLoading}
           >
-            Submit
+            {isLoading ? "Submitting..." : "Submit"}
           </button>
         </div>
       </form>
