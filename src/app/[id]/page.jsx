@@ -29,14 +29,14 @@ export default async function Slug({ params }) {
         <div className="relative" style={{ flex: "0 0 840px" }}>
           <Image
             className="rounded-tr-xl rounded-tl-xl object-cover"
-            src={`data:image/jpeg;base64,${data.image}`}
+            src={`${data.imageUrl}`}
             width={840}
             height={670}
             alt="home"
             unoptimized={true}
           />
           <div className="absolute top-10 left-10 bg-black opacity-50 w-36 h-10 rounded-[20px] flex justify-center items-center">
-            <h2 className="text-white tracking-wider">იყიდება</h2>
+            <h2 className="text-white tracking-wider">{data.propertyType}</h2>
           </div>
         </div>
 

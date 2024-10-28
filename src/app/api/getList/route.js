@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import pool from "@/libs/connection";
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url); 
-  const id = searchParams.get("id"); 
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
   try {
+    let sql = `SELECT * FROM rooms`;
     const values = [];
-    let sql = `SELECT * FROM rooms `; 
+
     if (id) {
-      sql += ` WHERE id = ?`; 
+      sql += ` WHERE id = ?`;
       values.push(id);
     }
 
@@ -16,7 +17,7 @@ export async function GET(request) {
 
     const products = results.map((result) => ({
       ...result,
-      image: result.image.toString("base64"),
+      image: result.image ? result.image.toString("base64") : null,
     }));
 
     if (products.length === 0) {
