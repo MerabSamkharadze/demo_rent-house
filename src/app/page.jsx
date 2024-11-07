@@ -1,12 +1,12 @@
 import Card from "@/components/Card/Card";
 
-import image1 from "@/public/images/h2.png";
-import image2 from "@/public/images/h3.png";
-import image3 from "@/public/images/h4.png";
-import image4 from "@/public/images/h5.png";
-import image5 from "@/public/images/h6.png";
-import image6 from "@/public/images/h7.png";
-import image7 from "@/public/images/h8.png";
+import image1 from "/public/images/h1.png";
+import image2 from "/public/images/h3.png";
+import image3 from "/public/images/h4.png";
+import image4 from "/public/images/h5.png";
+import image5 from "/public/images/h6.png";
+import image6 from "/public/images/h7.png";
+import image7 from "/public/images/h8.png";
 
 export default function Home() {
   const homes = [
@@ -154,7 +154,7 @@ export default function Home() {
 
   return (
     <div
-      className="w-full flex flex-wrap gap-5 items-center py-12 px-12
+      className="w-full flex flex-wrap gap-5 items-center py-12 px-12 content-start
      "
     >
       {homes.map((home) => {

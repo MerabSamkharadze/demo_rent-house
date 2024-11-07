@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { loginSchema } from "@/libs/validation";
 import { useRouter } from "next/navigation";
 
-const signIn = () => {
+const SignIn = () => {
   const router = useRouter();
 
   const formik = useFormik({
@@ -115,4 +115,4 @@ const signIn = () => {
   );
 };
 
-export default signIn;
+export default SignIn;
