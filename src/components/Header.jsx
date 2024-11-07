@@ -1,11 +1,20 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header className="bg-red-900 fixed w-screen top-0 left-0 z-50 text-white py-4 px-6">
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">
-          <Link href="/">MyApp</Link>
+          <Link href="/">Rent House</Link>
         </div>
         <nav className="hidden md:flex space-x-4">
           <Link href="/about" className="hover:underline">
@@ -18,8 +27,7 @@ function Header() {
             Contact
           </Link>
         </nav>
-        <button className="md:hidden">
-          {/* Icon for mobile menu */}
+        <button onClick={toggleMenu} className="md:hidden">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -36,6 +44,32 @@ function Header() {
           </svg>
         </button>
       </div>
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="mt-4 space-y-2 md:hidden">
+          <Link
+            href="/about"
+            className="block hover:underline"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            About
+          </Link>
+          <Link
+            href="/listing"
+            className="block hover:underline"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Listing
+          </Link>
+          <Link
+            href="/contact"
+            className="block hover:underline"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Contact
+          </Link>
+        </div>
+      )}
     </header>
   );
 }
