@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Lokation from "@/public/svg/Lokation";
-import Bed from "@/public/svg/Bed";
-import Vector from "@/public/svg/Vector";
-import Vector2 from "@/public/svg/Vector2";
+import Lokation from "/public/svg/Lokation";
+import Bed from "/public/svg/Bed";
+import Vector from "/public/svg/Vector";
+import Vector2 from "/public/svg/Vector2";
 
 export default function Card({
   imgSrc,
