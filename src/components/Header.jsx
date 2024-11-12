@@ -11,7 +11,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-red-900 fixed w-screen top-0 left-0 z-50 text-white py-4 px-6">
+    <header className="bg-red-900 fixed w-screen top-0 left-0 z-50 text-white py-4 px-6  ">
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">
           <Link href="/">Rent House</Link>
@@ -46,7 +46,7 @@ function Header() {
       </div>
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="mt-4 space-y-2 md:hidden">
+        <div className="mt-4 flex flex-col items-center space-y-2 md:hidden">
           <Link
             href="/about"
             className="block hover:underline"
