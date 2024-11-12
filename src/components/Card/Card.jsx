@@ -17,7 +17,7 @@ export default function Card({
     <div className="  flex-col justify-start items-start inline-flex cursor-pointer ">
       <div className="absolute mt-5 ml-5 w-[90px] h-[26px] p-1.5 bg-[#021526]/50 rounded-[15px] justify-center items-center gap-2.5 inline-flex">
         <div className="text-center text-white text-xs font-medium font-['FiraGO'] tracking-wide">
-          {forRent ? "ქირავდება" : "იყიდება"}
+          {forRent === "rent" ? "ქირავდება" : "იყიდება"}
         </div>
       </div>
       <Image
@@ -31,7 +31,7 @@ export default function Card({
       <div className="self-stretch h-[148px] px-[25px] py-[22px] bg-white rounded-bl-[14px] rounded-br-[14px] border-l border-r border-b border-[#dadada] flex-col justify-center items-start gap-5 flex">
         <div className="self-stretch h-[60px] flex-col justify-start items-start gap-1.5 flex">
           <div className="self-stretch text-[#021526] text-[28px] font-bold font-['FiraGO']">
-            {price} ₾
+            {new Intl.NumberFormat("ka-GE").format(price)} ₾
           </div>
           <div className="self-stretch justify-start items-center gap-1 inline-flex">
             <Lokation />
